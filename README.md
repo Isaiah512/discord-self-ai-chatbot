@@ -20,7 +20,7 @@ git clone https://github.com/Isaiah512/discord-self-ai-chatbot.git
 
 You can install them using pip:
 ```bash
-pip install discord.py google-generativeai
+pip install google-generativeai
 ```
 
 3. Install additional dependencies:
@@ -51,3 +51,5 @@ CHANNEL_ID=your_discord_channel_id_here
 ```
 
 3. Add **-a** before every input.
+Example:
+-a Hello!
