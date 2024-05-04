@@ -19,10 +19,12 @@ while true; do
     else
       if [[ $LAST_MESSAGE == "-a"* ]]; then
         echo "Found message starting with '-a': $LAST_MESSAGE"
-        
+
         MESSAGE_CONTENT="${LAST_MESSAGE#'-a'}"
 
-        MESSAGE_CONTENT=$(python3 - <<END
+        MESSAGE_CONTENT=$(echo "$MESSAGE_CONTENT" | sed 's/"/\\"/g')
+
+        MESSAGE_RESPONSE=$(python3 - <<END
 import google.generativeai as genai
 
 genai.configure(api_key="$TOKEN")
@@ -65,20 +67,29 @@ convo.send_message("$MESSAGE_CONTENT")
 print(convo.last.text)
 END
 )
-        if [ -z "$MESSAGE_CONTENT" ]; then
+
+        if [ -z "$MESSAGE_RESPONSE" ]; then
           echo "Generated message is empty"
         else
+         MESSAGE_RESPONSE=$(echo "$MESSAGE_RESPONSE" | sed -e 's/"/\\"/g' -e 's/  */ /g' -e ':a' -e 'N' -e '$!ba' -e 's/\n/ /g')
+
+          echo "Sending generated message:"
+          echo "{\"mobile_network_type\": \"unknown\", \"content\": \"$MESSAGE_RESPONSE\", \"nonce\": \"$NONCE\"}"
+
           curl "https://discord.com/api/v9/channels/$CHANNEL_ID/messages" \
-            -H "authorization: $AUTH_KEY" \
-            -H 'content-type: application/json' \
-            --data-raw "{\"mobile_network_type\":\"unknown\",\"content\":\"$MESSAGE_CONTENT\",\"nonce\":\"$NONCE\"}"
+          -H "authorization: $AUTH_KEY" \
+          -H 'content-type: application/json' \
+          --data-raw "{\"mobile_network_type\": \"unknown\", \"content\": \"$MESSAGE_RESPONSE\", \"nonce\": \"$NONCE\"}"
+
+          echo "Generated message: $MESSAGE_RESPONSE"
         fi
       else
         echo "Message does not start with '-a': $LAST_MESSAGE"
       fi
     fi
   fi
- 
-  # every 5 seconds it checks if there is a new message
+
+  # Wait for 5 seconds before checking for new messages
   sleep 5
 done
+
