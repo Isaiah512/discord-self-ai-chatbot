@@ -16,7 +16,6 @@ git clone https://github.com/Isaiah512/discord-self-ai-chatbot.git
 ```
 
 2. Install the required Python packages:
-- discord.py
 - google-generativeai
 
 You can install them using pip:
@@ -39,8 +38,6 @@ brew install jq
 ```
 
 ### Usage
-Add **-a** before every input.
-
 1. Create a `.env` file in the project directory with the following content:
 ```
 TOKEN=your_discord_token_here
@@ -52,3 +49,5 @@ CHANNEL_ID=your_discord_channel_id_here
 ```
 ./discord_bot.sh
 ```
+
+3. Add **-a** before every input.
