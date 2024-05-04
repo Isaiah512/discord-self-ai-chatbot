@@ -25,16 +25,18 @@ pip install google-generativeai
 
 3. Install additional dependencies:
 - jq
+- PIL
+- curl
 
-On devian-based systems you can install `jq` using apt:
+On debian-based systems you can install them using apt:
 ```bash
 sudo apt-get update
-sudo apt-get install jq
+sudo apt-get install jq pillow curl
 ```
 
-On macOS, you can install `jq` using Homebrew:
+On macOS, you can install them using Homebrew:
 ```bash
-brew install jq
+brew install jq pillow pillow curl
 ```
 
 ### Usage
@@ -49,7 +51,12 @@ CHANNEL_ID=your_discord_channel_id_here
 ```
 ./discord_bot.sh
 ```
+## Commands
+1. `-help`
+To get a list of commands available.
 
-3. Add **-a** before every input.
-Example:
--a Hello!
+2. `-a text here`
+Generates text based on the provided input. It accepts a string of text as anargument and generates text output accordingly.
+
+3. `-i text here[with image attached]`
+A combination of image and text as inputs that allows answer questions about the provided image.
