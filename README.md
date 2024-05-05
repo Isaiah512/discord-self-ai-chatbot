@@ -26,9 +26,6 @@ pip install google-generativeai
 ```
 
 3. Install dependencies:
-- jq
-- PIL
-- curl
 ```
 pip install -r requirements.txt
 ```
