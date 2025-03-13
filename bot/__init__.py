@@ -1,0 +1,3 @@
+"""
+Discord bot application package
+"""

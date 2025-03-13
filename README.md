@@ -1,14 +1,18 @@
 # Discord Self AI Chatbot with Gemini
-Transform your Discord account into an AI chatbot using the Gemini AI model.
+Transform your Discord account into an AI chatbot using the Google Gemini AI model.
 
 Warning: Use this tool at your own risk. I do not take any responsibility if your Discord account gets banned or faces any other consequences due to the use of this tool. Make sure to comply with Discord's terms of service and guidelines.
 
+## Features
+- Text Conversations
+- Computer vision for one or more images
+- Conversation memory
+- Channel context awareness
+
 ## Setup
-- Python 3.7 or higher
-- Discord.py library
-- aiohttp library
-- google.generativeai library
-- PIL library
+- Python 3.9 or higher
+- A Discord account and its token 
+- Google Gemini API key
 
 ### Installation
 
@@ -17,12 +21,10 @@ Warning: Use this tool at your own risk. I do not take any responsibility if you
 git clone https://github.com/Isaiah512/discord-self-ai-chatbot.git
 ```
 
-2. Install the required Python packages:
-- google-generativeai
-
-You can install them using pip:
+2. Create a virtual environment"
 ```bash
-pip install google-generativeai
+python -m venv venv
+source venv/bin/activate  # On Windows, use: venv\Scripts\activate
 ```
 
 3. Install dependencies:
@@ -33,20 +35,16 @@ pip install -r requirements.txt
 ### Configuration
 1. Create a `.env` file in the project directory with the following content:
 ```
-TOKEN=your_gemini_api_key_here
-AUTH_KEY=your_discord_token_here
+DISCORD_TOKEN=your_discord_token_here
+GEMINI_API_KEY=your_discord_token_here
 ```
 
-2. Run the script:
+2. Run the bot:
 ```
 python3 discord_bot.py
 ```
-## Commands
-1. `-help`
-To get a list of commands available.
 
-2. `-a text here`
-Generates text based on the provided input. It accepts a string of text as anargument and generates text output accordingly.
-
-3. `-i text here[with image attached]`
-A combination of image and text as inputs that allows answer questions about the provided image.
+## Usage
+- Mention the bot with text to get a response: `@AccountBot What is the capital of France?`
+- Mention the bot with one or more image attachment: `@AccountBot What's in this image?`
+- Use `@AccountName help` to see available commands.
