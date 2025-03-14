@@ -18,10 +18,10 @@ Warning: Use this tool at your own risk. I do not take any responsibility if you
 
 1. Clone this repository to your local machine:
 ```bash
-git clone https://github.com/Isaiah512/discord-self-ai-chatbot.git
+git clone https://github.com/Isaiah512/Discord-Self-AI-Chatbot.git
 ```
 
-2. Create a virtual environment"
+2. Create a virtual environment:
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows, use: venv\Scripts\activate
@@ -36,7 +36,7 @@ pip install -r requirements.txt
 1. Create a `.env` file in the project directory with the following content:
 ```
 DISCORD_TOKEN=your_discord_token_here
-GEMINI_API_KEY=your_discord_token_here
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
 2. Run the bot:
