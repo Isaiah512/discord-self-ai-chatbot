@@ -3,7 +3,7 @@ Bot commands
 """
 from bot.memory import get_user_memory, get_channel_context
 from bot.ai_service import process_text_query, process_image_query
-from utils.helpers import send_chunked_message
+from utils.helpers import send_chunked_message, extract_user_info
 
 async def handle_help_command(message):
     """Display help message."""
@@ -16,7 +16,7 @@ async def handle_help_command(message):
     await message.channel.send(help_text)
 
 async def handle_text_command(message, query):
-    """Handle text queries."""
+    """Handle text-based queries."""
     if not query:
         await message.channel.send("Please provide a message after mentioning me.")
         return
@@ -25,11 +25,13 @@ async def handle_text_command(message, query):
         user_id = str(message.author.id)
         conversation_memory = get_user_memory(user_id)
         channel_context = get_channel_context(str(message.channel.id))
+        user_info = extract_user_info(message.author)
         
         response_content = await process_text_query(
             conversation_memory, 
             query, 
-            channel_context
+            channel_context,
+            user_info
         )
         
         await send_chunked_message(message.channel, response_content)
@@ -39,11 +41,12 @@ async def handle_text_command(message, query):
         print(f"Error in text processing: {e}")
 
 async def handle_image_command(message, prompt):
-    """Handle image queries."""
+    """Handle image-based queries."""
     attachments = message.attachments
     
     try:
         channel_context = get_channel_context(str(message.channel.id))
+        user_info = extract_user_info(message.author)
         
         if len(attachments) > 1:
             await message.channel.send(f"Processing {len(attachments)} attachments...")
@@ -51,7 +54,8 @@ async def handle_image_command(message, prompt):
         response_text = await process_image_query(
             prompt,
             attachments,
-            channel_context
+            channel_context,
+            user_info
         )
         
         await send_chunked_message(message.channel, response_text)

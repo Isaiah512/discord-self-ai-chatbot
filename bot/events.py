@@ -1,14 +1,15 @@
 """
 Discord event handlers
 """
-from bot.memory import store_channel_message
+from bot.memory import store_channel_message, store_user_info
 from bot.commands import handle_help_command, handle_text_command, handle_image_command
+from utils.helpers import extract_user_info
 
 async def on_ready(client):
     """Called when the client has successfully connected to Discord."""
     print(f'Logged in as {client.user.name} (ID: {client.user.id})')
     print('------')
-    print('Ready to respond to messages')
+    print('Ready to respond to messages..')
 
 async def on_message(client, message):
     """Process incoming messages."""
@@ -18,6 +19,11 @@ async def on_message(client, message):
     # Skip processing if message is from the client itself
     if message.author.id == client.user.id:
         return
+    
+    # Store user info
+    user_id = str(message.author.id)
+    user_info = extract_user_info(message.author)
+    store_user_info(user_id, user_info)
         
     # Process commands when the client is mentioned
     if client.user in message.mentions:

@@ -1,10 +1,10 @@
 """
-Configuration settings
+Configuration settings for the Discord bot
 """
 import os
 from google.generativeai.types.safety_types import HarmCategory, HarmBlockThreshold
 
-# pre-prompt
+# System prompt for the AI
 SYSTEM_PROMPT = """
 You are a helpful and knowledgeable AI assistant.
 Your personality traits:
@@ -14,15 +14,17 @@ Your personality traits:
 
 Always respond in a natural, conversational manner.
 When responding, use the conversation history to provide context-aware answers.
+Address users by their name when it's provided to you.
+Remember information about users to personalize your responses.
 """
 
-# model settings
+# AI Model settings
 GEMINI_MODEL_TEXT = "gemini-2.0-flash"
 GEMINI_MODEL_VISION = "gemini-2.0-flash"
 GEMINI_TEMPERATURE = 0.5
 GEMINI_MAX_OUTPUT_TOKENS = 2048
 
-# safety settings
+# Safety settings for the Gemini model
 GEMINI_SAFETY_SETTINGS = {
     HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
     HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
@@ -30,12 +32,12 @@ GEMINI_SAFETY_SETTINGS = {
     HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE
 }
 
-# bot settings
+# Discord bot settings
 MAX_MESSAGE_LENGTH = 2000
 CHUNK_SIZE = 1900
 MESSAGE_CHUNK_SUFFIX = " (continued...)"
 
-# memory settings
+# Conversation memory settings
 MAX_USER_MESSAGES = 100
 MAX_CHANNEL_MESSAGES = 50
 MAX_CONTEXT_MESSAGES = 10

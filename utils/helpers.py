@@ -6,7 +6,7 @@ import tempfile
 from config.settings import CHUNK_SIZE, MESSAGE_CHUNK_SUFFIX
 
 async def send_chunked_message(channel, content):
-    """Send a long message in chunks with discords message length limit."""
+    """Send a long message in chunks"""
     from config.settings import MAX_MESSAGE_LENGTH
     
     if len(content) <= MAX_MESSAGE_LENGTH:
@@ -53,3 +53,14 @@ def cleanup_temp_files(file_paths):
             os.remove(path)
         except Exception as e:
             print(f"Error removing temporary file {path}: {e}")
+
+def extract_user_info(user):
+    """Extract information about the Discord user."""
+    user_info = {
+        'id': str(user.id),
+        'name': user.name,
+        'discriminator': user.discriminator if hasattr(user, 'discriminator') else '0000',
+        'display_name': user.display_name if hasattr(user, 'display_name') else user.name,
+    }
+        
+    return user_info

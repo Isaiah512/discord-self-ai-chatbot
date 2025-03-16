@@ -7,7 +7,8 @@ Warning: Use this tool at your own risk. I do not take any responsibility if you
 - Text Conversations
 - Computer vision for one or more images
 - Conversation memory
-- Channel context awareness
+- Context awareness
+- Recognizes users
 
 ## Setup
 - Python 3.9 or higher

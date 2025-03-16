@@ -1,5 +1,5 @@
 """
-Google gemini integration
+Google Gemini models
 """
 import os
 import aiohttp
@@ -16,6 +16,7 @@ from config.settings import (
     GEMINI_SAFETY_SETTINGS
 )
 
+# Configure Google Generative AI API
 genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
 
 # Initialize the text model with LangChain
@@ -28,11 +29,16 @@ text_model = ChatGoogleGenerativeAI(
     safety_settings=GEMINI_SAFETY_SETTINGS
 )
 
-async def process_text_query(conversation_memory, query, channel_context=None):
-    """Process a text query using the Gemini model."""
+async def process_text_query(conversation_memory, query, channel_context=None, user_info=None):
+    """Process a text query"""
     enhanced_query = query
-    if channel_context:
-        enhanced_query = f"Recent channel conversation for context:\n{channel_context}\n\nMy question: {query}"
+    
+    user_context = ""
+    if user_info:
+        user_context = f"You are speaking with {user_info['name']}#{user_info['discriminator']} (User ID: {user_info['id']}). "
+    
+    if channel_context or user_context:
+        enhanced_query = f"{user_context}\nRecent channel conversation for context:\n{channel_context}\n\nMy text: {query}"
     
     conversation_memory.add_message(HumanMessage(content=enhanced_query))
     response = text_model.invoke(conversation_memory.get_messages())
@@ -40,8 +46,8 @@ async def process_text_query(conversation_memory, query, channel_context=None):
     
     return response.content
 
-async def process_image_query(prompt, attachments, channel_context=None):
-    """Process images with the Gemini vision model."""
+async def process_image_query(prompt, attachments, channel_context=None, user_info=None):
+    """Process images"""
     if not attachments:
         return "I was expecting an image but found none."
     
@@ -49,9 +55,14 @@ async def process_image_query(prompt, attachments, channel_context=None):
         prompt = "Describe this image in detail."
     
     # Build the vision prompt text
-    vision_prompt_text = f"User query: {prompt}"
+    user_context = ""
+    if user_info:
+        user_context = f"You are speaking with {user_info['name']}#{user_info['discriminator']} (User ID: {user_info['id']}). "
+    
+    vision_prompt_text = f"{user_context}User query: {prompt}"
+    
     if channel_context:
-        vision_prompt_text = f"Recent relevant conversation:\n{channel_context}\n\n{vision_prompt_text}"
+        vision_prompt_text = f"{user_context}Recent relevant conversation:\n{channel_context}\n\nUser query: {prompt}"
     
     images = []
     temp_files = []
