@@ -32,10 +32,11 @@ text_model = ChatGoogleGenerativeAI(
 async def process_text_query(conversation_memory, query, channel_context=None, user_info=None):
     """Process a text query"""
     enhanced_query = query
-    
+
+    # Build the text prompt 
     user_context = ""
     if user_info:
-        user_context = f"You are speaking with {user_info['name']}#{user_info['discriminator']} (User ID: {user_info['id']}). "
+        user_context = f"You are speaking with {user_info['name']} (User ID: {user_info['id']}). "
     
     if channel_context or user_context:
         enhanced_query = f"{user_context}\nRecent channel conversation for context:\n{channel_context}\n\nMy text: {query}"
@@ -54,10 +55,10 @@ async def process_image_query(prompt, attachments, channel_context=None, user_in
     if not prompt:
         prompt = "Describe this image in detail."
     
-    # Build the vision prompt text
+    # Build the vision prompt
     user_context = ""
     if user_info:
-        user_context = f"You are speaking with {user_info['name']}#{user_info['discriminator']} (User ID: {user_info['id']}). "
+        user_context = f"You are speaking with {user_info['name']} (User ID: {user_info['id']}). "
     
     vision_prompt_text = f"{user_context}User query: {prompt}"
     

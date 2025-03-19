@@ -59,7 +59,6 @@ def extract_user_info(user):
     user_info = {
         'id': str(user.id),
         'name': user.name,
-        'discriminator': user.discriminator if hasattr(user, 'discriminator') else '0000',
         'display_name': user.display_name if hasattr(user, 'display_name') else user.name,
     }
         
