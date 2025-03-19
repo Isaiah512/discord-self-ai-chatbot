@@ -58,7 +58,7 @@ GEMINI_API_KEY=your_gemini_api_key_here
 
 Remember that sharing your Discord token with others could give them access to your account, so keep it secure.
 
-2. Run the bot:
+4. Run the bot:
 ```
 python3 discord_bot.py
 ```
