@@ -60,7 +60,7 @@ Remember that sharing your Discord token with others could give them access to y
 
 4. Run the bot:
 ```
-python3 discord_bot.py
+python3 main.py
 ```
 
 ## Usage
