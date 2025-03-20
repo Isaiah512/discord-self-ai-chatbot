@@ -7,6 +7,7 @@ from PIL import Image
 import google.generativeai as genai
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.schema import HumanMessage
+from config.settings import SYSTEM_PROMPT
 from utils.helpers import create_temp_file, cleanup_temp_files
 from config.settings import (
     GEMINI_MODEL_TEXT, 
@@ -60,10 +61,10 @@ async def process_image_query(prompt, attachments, channel_context=None, user_in
     if user_info:
         user_context = f"You are speaking with {user_info['name']} (User ID: {user_info['id']}). "
     
-    vision_prompt_text = f"{user_context}User query: {prompt}"
+    vision_prompt_text = f"{SYSTEM_PROMPT}\n\n{user_context}User query: {prompt}"
     
     if channel_context:
-        vision_prompt_text = f"{user_context}Recent relevant conversation:\n{channel_context}\n\nUser query: {prompt}"
+        vision_prompt_text = f"{SYSTEM_PROMPT}\n\n{user_context}Recent relevant conversation:\n{channel_context}\n\nUser query: {prompt}"
     
     images = []
     temp_files = []
