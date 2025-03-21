@@ -19,18 +19,23 @@ Transform your Discord account into an AI chatbot using the Google Gemini AI mod
 Here are some images showcasing the functionalities of the bot:
 
 1. **Text Conversation**
+
     ![image1](readme_img/image.png)
 
 2. **Computer Vision**
+
     ![image2](readme_img/image2.png)
 
 3. **Owner and User Recognition**
+
     ![image3](readme_img/image3.png)
 
 4. **Conversation Memory and Context Awareness**
+
     ![image4](readme_img/image4.png)
 
 5. **Customizable Personality**
+
     ![image5](readme_img/image5.png)
 
 ## Project Structure
