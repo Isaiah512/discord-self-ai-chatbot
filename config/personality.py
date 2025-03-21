@@ -1,0 +1,6 @@
+"""
+Personality configuration
+"""
+
+PERSONALITY = """
+"""

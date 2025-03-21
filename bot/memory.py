@@ -16,7 +16,7 @@ class ConversationMemory:
         self.messages = []
         self.max_messages = max_messages
         self.system_prompt = None
-
+        
     def add_message(self, message):
         """Handle memory rotation and management."""
         # Store system prompt separately if it's the first one
@@ -35,7 +35,7 @@ class ConversationMemory:
                 self.messages = to_keep
             else:
                 self.messages = self.messages[1:]
-
+                
     def get_messages(self):
         """Retrieve all messages in the conversation memory."""
         return self.messages
