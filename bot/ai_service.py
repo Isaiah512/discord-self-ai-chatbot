@@ -6,7 +6,7 @@ import aiohttp
 from PIL import Image
 import google.generativeai as genai
 from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain.schema import HumanMessage
+from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from config.settings import SYSTEM_PROMPT
 from utils.helpers import create_temp_file, cleanup_temp_files
 from config.settings import (
@@ -26,24 +26,30 @@ text_model = ChatGoogleGenerativeAI(
     google_api_key=os.getenv('GEMINI_API_KEY'),
     temperature=GEMINI_TEMPERATURE,
     max_output_tokens=GEMINI_MAX_OUTPUT_TOKENS,
-    convert_system_message_to_human=True,
     safety_settings=GEMINI_SAFETY_SETTINGS
 )
 
 async def process_text_query(conversation_memory, query, channel_context=None, user_info=None):
     """Process a text query"""
-    enhanced_query = query
-
     # Build the text prompt 
     user_context = ""
     if user_info:
         user_context = f"You are speaking with {user_info['name']} (User ID: {user_info['id']}). "
     
+    enhanced_query = query
     if channel_context or user_context:
         enhanced_query = f"{user_context}\nRecent channel conversation for context:\n{channel_context}\n\nMy text: {query}"
     
-    conversation_memory.add_message(HumanMessage(content=enhanced_query))
-    response = text_model.invoke(conversation_memory.get_messages())
+    messages = []
+    
+    if not any(isinstance(msg, SystemMessage) for msg in conversation_memory.messages):
+        messages.append(SystemMessage(content=SYSTEM_PROMPT))
+    
+    messages.extend(conversation_memory.messages)
+    current_message = HumanMessage(content=enhanced_query)
+    messages.append(current_message)
+    response = text_model.invoke(messages)
+    conversation_memory.add_message(current_message)
     conversation_memory.add_message(response)
     
     return response.content

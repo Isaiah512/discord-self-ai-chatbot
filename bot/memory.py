@@ -2,7 +2,7 @@
 Conversation memory management
 """
 from collections import defaultdict, deque
-from langchain.schema import HumanMessage, SystemMessage
+from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from config.settings import MAX_USER_MESSAGES, MAX_CHANNEL_MESSAGES, SYSTEM_PROMPT
 
 # Storage for user conversations, channel messages, and user info
@@ -15,30 +15,32 @@ class ConversationMemory:
     def __init__(self, max_messages=MAX_USER_MESSAGES):
         self.messages = []
         self.max_messages = max_messages
-        self.system_prompt = None
         
     def add_message(self, message):
-        """Handle memory rotation and management."""
-        # Store system prompt separately if it's the first one
-        if isinstance(message, SystemMessage) and not self.system_prompt:
-            self.system_prompt = message
-            self.messages.append(message)
+        """Add a message to the conversation."""
+        self.messages.append(message)
+        self._rotate_messages()
+    
+    def _rotate_messages(self):
+        """Ensure the conversation doesn't exceed the maximum number of messages."""
+        if len(self.messages) <= self.max_messages:
             return
             
-        self.messages.append(message)
-        # If limit exceeds, do the rotation
-        if len(self.messages) > self.max_messages:
-            if self.system_prompt:
-                # Remove the oldest message but keep the system prompt
-                non_system_messages = [m for m in self.messages if m != self.system_prompt]
-                to_keep = [self.system_prompt] + non_system_messages[1:]
-                self.messages = to_keep
-            else:
-                self.messages = self.messages[1:]
-                
-    def get_messages(self):
-        """Retrieve all messages in the conversation memory."""
-        return self.messages
+        # find the system message
+        system_idx = None
+        for i, msg in enumerate(self.messages):
+            if isinstance(msg, SystemMessage):
+                system_idx = i
+                break
+        
+        # If we have a system message, keep it and remove oldest normal messages
+        if system_idx is not None:
+            system_msg = self.messages[system_idx]
+            other_messages = [m for i, m in enumerate(self.messages) if i != system_idx]
+            to_keep = other_messages[-(self.max_messages - 1):]
+            self.messages = [system_msg] + to_keep
+        else:
+            self.messages = self.messages[-self.max_messages:]
 
 def get_user_memory(user_id):
     """Get or create a conversation memory for a user."""
